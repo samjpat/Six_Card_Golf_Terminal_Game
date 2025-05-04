@@ -3,33 +3,33 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <stack>
 #include <string>
 #include <utility>
 #include <vector>
 #include <unordered_map>
 #include <iostream>
 
+#include "deck.hpp"
+
+class Golf{
+	private:
+		int num_holes;
+		int player_1_score = 0;
+		int player_2_score = 0;
+		int hole = 0;
+
+		stack<Card> discard;
+		stack<Card> draw_pile;
+		vector<Card> p1_cards;
+		vector<Card> p2_cards;
+
+	public:
+		void get_options(int argc, char **argv);
+
+		void setup();
+
+		void calc_points();
 
 
-enum Rank {
-  TWO     = 0,
-  THREE   = 1,
-  FOUR    = 2,
-  FIVE    = 3,
-  SIX     = 4,
-  SEVEN   = 5,
-  EIGHT   = 6,
-  NINE    = 7,
-  TEN     = 8,
-  JACK    = 9,
-  QUEEN   = 10,
-  KING    = 11,
-  ACE     = 12,
-};
-
-enum Suit {
-  SPADES   = 0,
-  HEARTS   = 1,
-  CLUBS    = 2,
-  DIAMONDS = 3,
 };
