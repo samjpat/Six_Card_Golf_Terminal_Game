@@ -40,6 +40,7 @@ class Card{
     Rank rank;
     Suit suit;
     int points;
+		string symbol;
 		
   public:
     Card() : rank(TWO), suit(SPADES), points(2){}
@@ -55,6 +56,27 @@ class Card{
 				else{
 					points = rank_in;
 				}
+				switch(rank){
+					case ACE:{
+						symbol = 'A';
+						break;
+					}
+					case JACK:{
+						symbol = 'J';
+						break;
+					}
+					case QUEEN:{
+						symbol = 'Q';
+						break;
+					}
+					case KING:{
+						symbol = 'K';
+						break;
+					}
+					default:{
+						symbol = std::to_string(points);
+					}
+				}
 			}
 
 		Rank get_rank(){
@@ -67,5 +89,9 @@ class Card{
 
 		int get_points(){
 			return points;
+		}
+
+		string get_symbol(){
+			return symbol;
 		}
 };

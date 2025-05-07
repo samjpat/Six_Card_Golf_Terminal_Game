@@ -1,0 +1,12 @@
+Hand: 1
+[8] [9] [ ]
+[ ] [ ] [ ]
+Discard:  
+Drawn: 
+[8] [3] [ ]
+[ ] [K] [ ]
+
+Scores:
+Computer: 12 
+You: 12
+
