@@ -9,6 +9,8 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -30,6 +32,9 @@ class Golf{
 		stack<Card> draw_pile;
 		vector<Card> p_cards;
 		vector<Card> comp_cards;
+		int num_flipped = 2;
+		//multimap<string, size_t> comp_map;
+
 
 	public:
 		Golf():deck({Card{"A", 1, false}, Card{"A", 1, false}, Card{"A", 1, false}, Card{"A", 1, false}, 
@@ -58,12 +63,17 @@ class Golf{
 
 		void flip();
 
-		void switch_card(int action);
+		void switch_card(int action, string pile);
+
+		void comp_turn();
 
 		void shuffle(){
-			for(size_t i = deck.size() - 1; i >= 1; --i){
-				size_t rand_num = rand() % i;
-				swap(deck[i], deck[rand_num]);
-			}
+			//for(size_t i = deck.size() - 1; i >= 1; --i){
+			//	size_t rand_num = rand() % i;
+			//	swap(deck[i], deck[rand_num]);
+			//}
+			random_device rd;
+			mt19937 gen(rd());
+			std::shuffle(deck.begin(), deck.end(), gen);
 		}
 };

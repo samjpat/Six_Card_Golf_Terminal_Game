@@ -24,6 +24,7 @@ int main(int argc, char *argv[]){
 		golf.get_options(argc, argv);
 		golf.setup();
 		golf.output();
+		golf.game_loop();
   }
   catch(runtime_error& err){
     cerr << err.what() << "\n";
@@ -70,6 +71,8 @@ void Golf::setup(){
 			comp_cards.push_back(top);
 		}
 	}
+	discard.push(draw_pile.top());
+	draw_pile.pop();
 	int card1;
 	int card2;
 	cout << "Select 2 cards to flip (1 4): ";
@@ -77,35 +80,117 @@ void Golf::setup(){
 	cin >> card2;
 	p_cards[card1-1].showing = true;
 	p_cards[card2-1].showing = true;
+	comp_cards[0].showing = true;
+	comp_cards[1].showing = true;
 }
 
 
 void Golf::game_loop(){
-	int action = 0;
-	cout << "Select action (1 to draw, 2 to draw from discard, 3 to flip card):";
-	cin >> action;
-	if(action == 3){
-		flip();
-	}
-	else{
+	while(hole <= num_holes){
 		int action = 0;
-		cout << "Select action (0 to discard, 1-6 to place card)";
+		cout << "Select action (1 to draw, 2 to draw from discard, 3 to flip card): ";
 		cin >> action;
-		switch_card(action);
+		if(action == 3){
+			flip();
+		}
+		else{
+			cout << "You drew a ";
+			if(action == 2){
+				cout << discard.top().rank << "\n";
+				int action = 0;
+				cout << "Select action (0 to discard, 1-6 to place card): ";
+				cin >> action;
+				switch_card(action, "discard");
+			}
+			else{
+				cout << draw_pile.top().rank << "\n";
+				int action = 0;
+				cout << "Select action (0 to discard, 1-6 to place card): ";
+				cin >> action;
+				switch_card(action, "draw");
+			}
+			
+		}
+		output();
+		comp_turn();
+		output();
+		calc_points();
+		hole++;
 	}
 }
 
+
+void Golf::comp_turn(){
+	Card disc = discard.top();
+	int max = comp_cards[0].points;
+	size_t max_i = 0;
+	for(size_t i = 0; i < 6; ++i){
+		if(comp_cards[i].showing){
+			if(comp_cards[i].rank == disc.rank){
+				if(comp_cards[(i+3)%6].showing && comp_cards[(i+3)%6].rank != comp_cards[i].rank){
+					disc.showing = true;
+					comp_cards[(i+3)%6] = disc;
+					return;
+				}
+			}
+			if(comp_cards[i].points > max){
+				max = comp_cards[i].points;
+				max_i = i;
+			}
+		}
+	}
+	if(num_flipped < 5){
+		for(size_t i = 2; i < 6; i++){
+			if(!comp_cards[i].showing){
+				comp_cards[i].showing = true;
+				return;
+			}
+		}
+	}
+	else{
+		Card top = draw_pile.top();
+		draw_pile.pop();
+		for(size_t i = 0; i < 6; ++i){
+			if(comp_cards[i].showing){
+				if(comp_cards[i].rank == top.rank){
+					if(comp_cards[(i+3)%6].showing && comp_cards[(i+3)%6].rank != comp_cards[i].rank){
+						top.showing = true;
+						comp_cards[(i+3)%6] = disc;
+						return;
+					}
+				}
+				else if(top.points < max){
+					top.showing = true;
+					comp_cards[max_i] = top;
+				}
+				else{
+					discard.push(top);
+				}
+			}
+		}
+	}
+}
+
+
+
 void Golf::flip(){
 	int action = 0;
-	cout << "Select card to flip (1-6)";
+	cout << "Select card to flip (1-6): ";
 	cin >> action;
 	p_cards[action-1].showing = true;
 }
 
-void Golf::switch_card(int action){
-	Card drawn_card = draw_pile.top();
+void Golf::switch_card(int action, string pile){
+	Card drawn_card;
+	if(pile == "draw"){
+		drawn_card = draw_pile.top();
+		draw_pile.pop();
+	}
+	else{
+		drawn_card = discard.top();
+		discard.pop();
+	}
 	drawn_card.showing = true;
-	draw_pile.pop();
 	if(action == 0){
 		discard.push(drawn_card);
 	}
@@ -115,8 +200,6 @@ void Golf::switch_card(int action){
 		p_cards[action-1] = drawn_card;
 	}
 }
-
-
 
 void Golf::calc_points(){
 	for(size_t i = 0; i < 3; i++){
@@ -157,7 +240,7 @@ void Golf::output(){
 		}
 	}
 	cout << "\n";
-	cout << "Discard: " << "\n";
+	cout << "Discard: " << discard.top().rank << "\n";
 	for(size_t i = 0; i < p_cards.size(); ++i){
 		cout << "[";
 		if(p_cards[i].showing){
