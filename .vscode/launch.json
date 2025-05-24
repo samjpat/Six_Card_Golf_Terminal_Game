@@ -9,7 +9,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/golf_debug",
-        "args": ["-h", "1"],
+        "args": ["-h", "3"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],

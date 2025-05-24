@@ -26,12 +26,13 @@ class Golf{
 		int player_score = 0;
 		int comp_score = 0;
 		int hole = 1;
-		vector<Card> deck;	
-
+		vector<Card> deck;
 		stack<Card> discard;
 		stack<Card> draw_pile;
 		vector<Card> p_cards;
 		vector<Card> comp_cards;
+		int comp_show = 2;
+		int player_show = 2;
 		int num_flipped = 2;
 		//multimap<string, size_t> comp_map;
 
@@ -57,7 +58,7 @@ class Golf{
 
 		void calc_points();
 
-		void output();
+		bool output();
 
 		void game_loop();
 
@@ -66,6 +67,10 @@ class Golf{
 		void switch_card(int action, string pile);
 
 		void comp_turn();
+
+		void player_turn();
+
+		void hole_output();
 
 		void shuffle(){
 			//for(size_t i = deck.size() - 1; i >= 1; --i){
