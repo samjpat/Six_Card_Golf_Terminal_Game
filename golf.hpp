@@ -81,4 +81,8 @@ class Golf{
 			mt19937 gen(rd());
 			std::shuffle(deck.begin(), deck.end(), gen);
 		}
+
+		bool is_matched(size_t i){
+			return comp_cards[(i+3)%6].showing && comp_cards[(i+3)%6].rank == comp_cards[i].rank;
+		}
 };
