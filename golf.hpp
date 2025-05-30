@@ -58,6 +58,8 @@ class Golf{
 
 		void calc_points();
 
+		int comp_showing_points();
+
 		bool output();
 
 		void game_loop();
@@ -73,10 +75,6 @@ class Golf{
 		void hole_output();
 
 		void shuffle(){
-			//for(size_t i = deck.size() - 1; i >= 1; --i){
-			//	size_t rand_num = rand() % i;
-			//	swap(deck[i], deck[rand_num]);
-			//}
 			random_device rd;
 			mt19937 gen(rd());
 			std::shuffle(deck.begin(), deck.end(), gen);
