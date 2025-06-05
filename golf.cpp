@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 
-
+// Uses getopt_long to receive the number of holes to be played from command line
 void Golf::get_options(int argc, char **argv){
   int option_i = 0;
   int option = 0;
@@ -52,6 +52,7 @@ void Golf::get_options(int argc, char **argv){
     }
   }
 }
+
 
 void Golf::setup(){
 	shuffle();	
@@ -91,7 +92,7 @@ void Golf::game_loop(){
 		while(num_flipped <= 6){
 			player_turn();
 			if(output()){
-				comp_turn();
+				last_comp_turn();
 				break;
 			}
 			comp_turn();
@@ -141,6 +142,7 @@ void Golf::comp_turn(){
 	disc.showing = true;
 	int max = -1;
 	size_t max_i = 0;
+	// Loops through the computers cards
 	for(size_t i = 0; i < 6; ++i){
 		if(comp_cards[i].showing){
 			if(comp_cards[i].rank == disc.rank && !is_matched(i)){

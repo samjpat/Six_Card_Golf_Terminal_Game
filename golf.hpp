@@ -70,6 +70,8 @@ class Golf{
 
 		void comp_turn();
 
+		void last_comp_turn();
+
 		void player_turn();
 
 		void hole_output();
