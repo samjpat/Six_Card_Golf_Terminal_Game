@@ -66,7 +66,7 @@ class Golf{
 
 		void flip();
 
-		void switch_card(int action, string pile);
+		void switch_card(size_t action, string pile);
 
 		void comp_turn();
 

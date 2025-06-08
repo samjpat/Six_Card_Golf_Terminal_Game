@@ -73,11 +73,13 @@ void Golf::setup(){
 	}
 	discard.push(draw_pile.top());
 	draw_pile.pop();
-	int card1;
-	int card2;
-	cout << "Select 2 cards to flip (1 4): ";
-	cin >> card1;
-	cin >> card2;
+	size_t card1 = 7;
+	size_t card2 = 7;
+	while(card1 == card2 || card1 > 6 || card2 > 6 || card1 == 0 || card2 == 0){
+		cout << "Select 2 cards to flip (1 4): ";
+		cin >> card1;
+		cin >> card2;
+	}
 	p_cards[card1-1].showing = true;
 	p_cards[card2-1].showing = true;
 	comp_cards[0].showing = true;
@@ -214,10 +216,16 @@ void Golf::comp_turn(){
 	}
 }
 
+void Golf::last_comp_turn(){
+
+}
+
 void Golf::player_turn(){
-	int action = 0;
-	cout << "Select action (1 to draw, 2 to draw from discard, 3 to flip card): ";
-	cin >> action;
+	size_t action = 0;
+	while(action > 3 || action  == 0){
+		cout << "Select action (1 to draw, 2 to draw from discard, 3 to flip card): ";
+		cin >> action;
+	}
 	if(action == 3){
 		flip();
 	}
@@ -225,16 +233,20 @@ void Golf::player_turn(){
 		cout << "You drew a ";
 		if(action == 2){
 			cout << discard.top().rank << "\n";
-			int action = 0;
-			cout << "Select action (0 to discard, 1-6 to place card): ";
-			cin >> action;
+			size_t action = 7;
+			while(action > 6) {
+				cout << "Select action (0 to discard, 1-6 to place card): ";
+				cin >> action;
+			}
 			switch_card(action, "discard");
 		}
 		else{
 			cout << draw_pile.top().rank << "\n";
-			int action = 0;
-			cout << "Select action (0 to discard, 1-6 to place card): ";
-			cin >> action;
+			size_t action = 7;
+			while(action > 6) {
+				cout << "Select action (0 to discard, 1-6 to place card): ";
+				cin >> action;
+			}
 			switch_card(action, "draw");
 		}			
 	}
@@ -242,13 +254,15 @@ void Golf::player_turn(){
 
 
 void Golf::flip(){
-	int action = 0;
-	cout << "Select card to flip (1-6): ";
-	cin >> action;
+	size_t action = 7;
+	while(action > 6){
+		cout << "Select card to flip (1-6): ";
+		cin >> action;
+	}
 	p_cards[action-1].showing = true;
 }
 
-void Golf::switch_card(int action, string pile){
+void Golf::switch_card(size_t action, string pile){
 	Card drawn_card;
 	if(pile == "draw"){
 		drawn_card = draw_pile.top();
