@@ -1,12 +1,9 @@
-Hand: 1
-[8] [9] [ ]
-[ ] [ ] [ ]
-Discard:  
-Drawn: 
-[8] [3] [ ]
-[ ] [K] [ ]
+[2] [5] [3]
+[J] [5] [J]
+Discard: A 9 Q
+Drawn: 6 Q 6 10 6 Q 5
+[2] [5] [8]
+[6] [7] [10]
 
-Scores:
-Computer: 12 
-You: 12
+
 

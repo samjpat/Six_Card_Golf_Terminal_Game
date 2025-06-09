@@ -94,9 +94,13 @@ void Golf::game_loop(){
 		while(num_flipped <= 6){
 			player_turn();
 			if(output()){
+				
 				last_comp_turn();
 				break;
 			}
+			string temp;
+			cout << "Enter a 1 to end turn: ";
+			cin >> temp;
 			comp_turn();
 			if(output()){
 				player_turn();
@@ -230,11 +234,74 @@ void Golf::comp_turn(){
 			max_i = i;
 		}
 	}
-	
-	
+	Card disc = discard.top();
+	disc.showing = true;
+	if(num_flipped == 5){
+		if(score_check() + disc.points <= 12){
+			for(size_t i = 0; i < 6; ++i){
+				if(!comp_cards[i].showing){
+					discard.pop();
+					discard.push(comp_cards[i]);
+					comp_cards[i] = disc;
+					cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i+1 << " spot\n";
+					return;
+				}
+			}
+		}
+	}
+	if(max != -1 && (max - disc.points) >= 4){
+		discard.pop();
+		discard.push(comp_cards[max_i]);
+		comp_cards[max_i] = disc;
 
+		cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << max_i+1 << " spot\n";
 
+		return;
+	}
+	else if(num_flipped < 5){
+		for(size_t i = 2; i < 6; i++){
+			if(!comp_cards[i].showing){
+				comp_cards[i].showing = true;
 
+				cout << "The computer flipped the card in position " << i+1 << "\n";
+
+				return;
+			}
+		}
+	}
+	else{
+		if(drawn_match_check()){
+			return;
+		}
+		Card drawn = draw_pile.top();
+		drawn.showing = true;
+		if(num_flipped == 5){
+			if(score_check() + drawn.points <= 12){
+				for(size_t i = 0; i < 6; ++i){
+					if(!comp_cards[i].showing){
+						draw_pile.pop();
+						discard.push(comp_cards[i]);
+						comp_cards[i] = drawn;
+						cout << "The computer drew a " << drawn.rank << " from the draw pile and placed it in the " << i << " spot\n";
+						return;
+					}
+				}
+			}
+		}
+
+		if(max != -1 && drawn.points < max){
+			discard.push(comp_cards[max_i]);
+			comp_cards[max_i] = drawn;
+
+			cout << "The computer drew a " << drawn.rank << " from the draw pile and placed it in the " << max_i+1 << " spot\n";
+
+			return;
+		}
+		else{
+			discard.push(drawn);
+			cout << "The computer drew a " << drawn.rank << " from the draw pile and discarded it\n";
+		}
+	}
 }
 
 void Golf::last_comp_turn(){
@@ -264,7 +331,7 @@ void Golf::last_comp_turn(){
 			if(!comp_cards[i].showing){
 				discard.push(comp_cards[i]);
 				comp_cards[i] = disc;
-				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i << " spot\n";
+				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i+1 << " spot\n";
 			}
 		}
 	}
