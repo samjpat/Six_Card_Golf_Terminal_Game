@@ -139,6 +139,7 @@ void Golf::game_loop(){
 }
 
 
+/*
 void Golf::comp_turn(){
 	Card disc = discard.top();
 	disc.showing = true;
@@ -215,10 +216,120 @@ void Golf::comp_turn(){
 		}
 	}
 }
+*/
 
-void Golf::last_comp_turn(){
+void Golf::comp_turn(){
+	if(discard_match_check()){
+		return;
+	}
+	int max = -1;
+	size_t max_i = 0;
+	for(size_t i = 0; i < 6; ++i){
+		if((comp_cards[i].points > max) && !is_matched(i)){
+			max = comp_cards[i].points;
+			max_i = i;
+		}
+	}
+	
+	
+
+
 
 }
+
+void Golf::last_comp_turn(){
+	if(discard_match_check()){
+		return;
+	}
+	Card disc = discard.top();
+	disc.showing = true;
+	int max = -1;
+	size_t max_i = 0;
+	for(size_t i = 0; i < 6; ++i){
+		if((comp_cards[i].points > max) && !is_matched(i)){
+			max = comp_cards[i].points;
+			max_i = i;
+		}
+	}
+
+	if(disc.points <= 6 && max >= 8){
+		discard.pop();
+		discard.push(comp_cards[max_i]);
+		comp_cards[max_i] = disc;
+		cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << max_i+1 << " spot\n";
+		return;
+	}
+	else if(disc.points <= 6){
+		for(size_t i = 0; i < 6; ++i){
+			if(!comp_cards[i].showing){
+				discard.push(comp_cards[i]);
+				comp_cards[i] = disc;
+				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i << " spot\n";
+			}
+		}
+	}
+	else if(drawn_match_check()){
+		return;
+	}
+
+	Card top = draw_pile.top();			
+	draw_pile.pop();	
+
+	if(top.points <= 6 && max >= 8){
+		discard.push(comp_cards[max_i]);
+		comp_cards[max_i] = top;
+		cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << max_i+1 << "spot\n";
+	}
+	else{
+		for(size_t i = 0; i < 6; ++i){
+			if(!comp_cards[i].showing){
+				discard.push(comp_cards[i]);
+				comp_cards[i] = top;
+				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << i << " spot\n";
+			}
+		}
+	}
+}
+
+
+bool Golf::discard_match_check(){
+	Card disc = discard.top();
+	disc.showing = true;
+	for(size_t i = 0; i < 6; ++i){
+		if(comp_cards[i].showing){
+			if(comp_cards[i].rank == disc.rank && !is_matched(i)){
+				discard.pop();
+				discard.push(comp_cards[(i+3)%6]);
+				comp_cards[(i+3)%6] = disc;
+				
+				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << (i+3)%6 +1 << "spot\n";
+
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Golf::drawn_match_check(){
+	Card top = draw_pile.top();						
+	top.showing = true;
+	for(size_t i = 0; i < 6; ++i){
+		if(comp_cards[i].showing){
+			if(comp_cards[i].rank == top.rank && !is_matched(i)){
+				discard.push(comp_cards[(i+3)%6]);
+				comp_cards[(i+3)%6] = top;
+				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << (i+3)%6 +1 << "spot\n";
+				draw_pile.pop();
+				return true;
+			}
+			
+		}
+	}
+	return false;
+}
+
+
 
 void Golf::player_turn(){
 	size_t action = 0;

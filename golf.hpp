@@ -72,6 +72,13 @@ class Golf{
 
 		void last_comp_turn();
 
+		bool discard_match_check();
+
+		bool drawn_match_check();
+
+
+
+
 		void player_turn();
 
 		void hole_output();
@@ -84,5 +91,16 @@ class Golf{
 
 		bool is_matched(size_t i){
 			return comp_cards[(i+3)%6].showing && comp_cards[(i+3)%6].rank == comp_cards[i].rank;
+		}
+
+		int score_check(){
+			int score = 0;
+			for(size_t i = 0; i < 6; i++){
+				Card temp = comp_cards[i];
+				if(temp.showing && !is_matched(i)){
+					score += temp.points;
+				}
+			}
+			return score;
 		}
 };
