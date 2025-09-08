@@ -1,14 +1,8 @@
 #include <getopt.h>
 #include <sys/types.h>
-#include <cstdint>
-#include <functional>
-#include <map>
 #include <stack>
 #include <string>
-#include <utility>
 #include <vector>
-#include <unordered_map>
-#include <iostream>
 #include <algorithm>
 #include <random>
 
@@ -75,9 +69,6 @@ class Golf{
 		bool discard_match_check();
 
 		bool drawn_match_check();
-
-
-
 
 		void player_turn();
 
