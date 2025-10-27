@@ -174,19 +174,18 @@ void Golf::comp_turn(){
 	}
 	Card disc = discard.top();
 	disc.showing = true;
-	if(num_flipped == 5){
-		if(score_check() + disc.points <= 12){
-			for(size_t i = 0; i < 6; ++i){
-				if(!comp_cards[i].showing){
-					discard.pop();
-					discard.push(comp_cards[i]);
-					comp_cards[i] = disc;
-					cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i+1 << " spot\n";
-					return;
-				}
+	if(num_flipped == 5 && score_check() + disc.points <= 12){
+		for(size_t i = 0; i < 6; ++i){
+			if(!comp_cards[i].showing){
+				discard.pop();
+				discard.push(comp_cards[i]);
+				comp_cards[i] = disc;
+				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << i+1 << " spot\n";
+				return;
 			}
 		}
 	}
+	
 	if(max != -1 && (max - disc.points) >= 4){
 		discard.pop();
 		discard.push(comp_cards[max_i]);
@@ -220,13 +219,13 @@ void Golf::comp_turn(){
 						draw_pile.pop();
 						discard.push(comp_cards[i]);
 						comp_cards[i] = drawn;
-						cout << "The computer drew a " << drawn.rank << " from the draw pile and placed it in the " << i << " spot\n";
+						cout << "The computer drew a " << drawn.rank << " from the draw pile and placed it in the " << i+1 << " spot\n";
 						return;
 					}
 				}
 			}
 		}
-
+ 
 		if(max != -1 && drawn.points < max){
 			discard.push(comp_cards[max_i]);
 			comp_cards[max_i] = drawn;
@@ -290,7 +289,7 @@ void Golf::last_comp_turn(){
 			if(!comp_cards[i].showing){
 				discard.push(comp_cards[i]);
 				comp_cards[i] = top;
-				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << i << " spot\n";
+				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << i+1 << " spot\n";
 			}
 		}
 	}
@@ -307,7 +306,7 @@ bool Golf::discard_match_check(){
 				discard.push(comp_cards[(i+3)%6]);
 				comp_cards[(i+3)%6] = disc;
 				
-				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << (i+3)%6 +1 << "spot\n";
+				cout << "The computer drew a " << disc.rank << " from the discard pile and placed it in the " << (i+3)%6 +1 << " spot\n";
 
 				return true;
 			}
@@ -325,7 +324,7 @@ bool Golf::drawn_match_check(){
 			if(comp_cards[i].rank == top.rank && !is_matched(i)){
 				discard.push(comp_cards[(i+3)%6]);
 				comp_cards[(i+3)%6] = top;
-				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << (i+3)%6 +1 << "spot\n";
+				cout << "The computer drew a " << top.rank << " from the draw pile and placed it in the " << (i+3)%6 +1 << " spot\n";
 				draw_pile.pop();
 				return true;
 			}
